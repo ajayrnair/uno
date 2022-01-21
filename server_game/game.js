@@ -64,7 +64,8 @@ function getCardDeck() {
 function getPlayer(name) {
     return {
         name,
-        cards: []
+        cards: [],
+        allowedToSkip: false,
     }
 }
 
@@ -138,9 +139,13 @@ function setNextPlayer(game) {
     game.currentPlayer = game.players[nextPlayerIndex].name;
 }
 
-function playPickCard(game, playerName) {
+function playPickCard(game, playerName, forcedToPick=false) {
     const player = game.players.find(player => player.name === playerName);
     const card = pickCard(game.gameDeck.cards);
+    if (!forcedToPick) {
+        // This player can not skip the turn without playing a card
+        player.allowedToSkip = true;
+    }
     addCardToPlayer(player, card);
 }
 
@@ -162,19 +167,22 @@ function playCard(game, playerName, color, value) {
     // take action based on card value
     if (value === 'WILD_DRAW4') {
         setNextPlayer(game);
-        playPickCard(game, game.currentPlayer);
-        playPickCard(game, game.currentPlayer);
-        playPickCard(game, game.currentPlayer);
-        playPickCard(game, game.currentPlayer);
+        playPickCard(game, game.currentPlayer, true);
+        playPickCard(game, game.currentPlayer, true);
+        playPickCard(game, game.currentPlayer, true);
+        playPickCard(game, game.currentPlayer, true);
     }
     else if (value === 'DRAW_2') {
         setNextPlayer(game);
-        playPickCard(game, game.currentPlayer);
-        playPickCard(game, game.currentPlayer);
+        playPickCard(game, game.currentPlayer, true);
+        playPickCard(game, game.currentPlayer, true);
     } else if (value === 'SKIP') {
         setNextPlayer(game);
     } else if (value === 'REVERSE') {
         game.direction = game.direction === 'CLOCKWISE' ? 'ANTI_CLOCKWISE' : 'CLOCKWISE';
+        if(game.players.length === 2) { // For two player game, reverse should work like Skip
+            setNextPlayer(game);
+        }
     }
 
     // Set next player to play

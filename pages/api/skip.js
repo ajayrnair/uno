@@ -11,14 +11,9 @@ export default async function handler(req, res) {
     if(!game) {
         res.status(200).json({status: 'GAME_DOES_NOT_EXIST'});
     } else {
-        const color = req.query.color;
-        const value = req.query.value;
-        const status = GameUtils.playCard(game, name,color,value);
-
-        // If this player picked a card, and has now played a card, player can no longer skip turn
         const player = game.players.find(player => player.name === name);
         player.allowedToSkip = false;
-
+        const status = GameUtils.setNextPlayer(game, name);
         Games.saveGame(game);
         res.status(200).json({status});
     }

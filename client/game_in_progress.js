@@ -24,7 +24,8 @@ export default function GameInProgress() {
     const game = useSelector( state => state.game);
     const dispatch = useDispatch();
     const playerName  = game.name;
-    const playerCards = game.game.players.find(player => player.name === playerName).cards;
+    const player = game.game.players.find(player => player.name === playerName);
+    const playerCards = player.cards;
     const otherPlayers = game.game.players.filter(player => player.name !== playerName).map(player => {
         return {
             name: player.name,
@@ -80,11 +81,16 @@ export default function GameInProgress() {
                })}
         </div>
         <div className = 'actionArea' style={{marginTop:'20px'}}>
-              <div>
+              {player.allowedToSkip !== true && <div>
                 <button disabled={!isTurn} onClick={() => {
                     fetch(`/api/pick?name=${playerName}&gameID=${game.gameID}`, {method: 'GET'});
                 }}>Pick A Card</button>
-             </div>
+             </div>}
+             {player.allowedToSkip == true && <div>
+                <button disabled={!isTurn} onClick={() => {
+                    fetch(`/api/skip?name=${playerName}&gameID=${game.gameID}`, {method: 'GET'});
+                }}>Skip turn</button>
+             </div>}
              <div>
                 <button disabled={!isNewColorRequired} onClick={() => {
                     fetch(`/api/play?name=${playerName}&gameID=${game.gameID}&color=red&value=${wildTypeDraw4 === true ? 'WILD_DRAW4' : 'WILD'}`, {method: 'GET'});
