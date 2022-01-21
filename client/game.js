@@ -44,7 +44,7 @@ export default function GamePlay() {
                 }
                 </div>}
                 {gameStatus === 'STARTED' && <GameInProgress />}
-                {/*Game completed*/}
+                {gameStatus === 'COMPLETED' && <div>{game.game.winner} won the game!</div>}
             </div>
         );
     } else {

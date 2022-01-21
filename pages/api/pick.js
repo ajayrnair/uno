@@ -1,15 +1,18 @@
-import Games from './games';
+import Games from '../../server_game/game_manager';
+import GameUtils from '../../server_game/game';
 
-export default function handler(req, res) {
+export default async function handler(req, res) {
     const name = req.query.name;
     const gameID = req.query.gameID;
     if(name == null || gameID == null) {
         res.status(500).json({name, gameID, error: 'name and gameID cannot be null'});
     }
-    if(!Games.hasGame(gameID)) {
+    const game = await Games.getGame(gameID, false);
+    if(!game) {
         res.status(200).json({status: 'GAME_DOES_NOT_EXIST'});
     } else {
-        Games.getGame(gameID).pickCard(name);
-        Games.getGame(gameID).setNextPlayer();
+        GameUtils.playPickCard(game, name);
+        Games.saveGame(game);
+        res.status(200).json(Games.getGameStateForUser(game, name));
     }
 }
