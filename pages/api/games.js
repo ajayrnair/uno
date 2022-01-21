@@ -1,11 +1,9 @@
+import canPlayCard from '../../client/canPlayCard';
+
 class Card {
     constructor(color, value) {
         this.color = color;
         this.value = value;
-    }
-
-    canPlay(topCard) {
-        return this.value === 'WILD' || this.value === 'WILD_DRAW_4' || topCard.color === this.color || topCard.value === this.color;
     }
 }
 
@@ -13,7 +11,7 @@ class Card {
 class GameDeck {
     constructor() {
         this.cards = [];
-        ['red', 'green', 'yellow', 'blue'].forEach((color) => {
+        ['red', 'green', 'blue', 'yellow'].forEach((color) => {
             ['0', '1', '2', '3', '4', '5', '6', '7', '8','9','SKIP', 'REVERSE', 'DRAW_2'].forEach((value) => {
                 this.cards.push(new Card(color, value));
                 if(value !== '0') { // there is only one 0 card, all other cards are repeated in a color
@@ -34,8 +32,22 @@ class GameDeck {
         }
     }
 
+    getRandomFirstCard() {
+        let firstCard = null;
+        while(firstCard == null) {
+            const randomIndex = Math.floor(Math.random() * this.cards.length);
+            const randomCard = this.cards[randomIndex];
+            if (!isNaN(randomCard.value)) {
+                firstCard = randomCard;
+                this.cards.splice(randomIndex, 1);
+            }
+        }
+        return firstCard;
+    }
+
     pickCard() {
-        return this.cards.pop();
+        const card = this.cards.pop();
+        return card;
     }
 }
 
@@ -51,7 +63,7 @@ class Player {
     }
 
     removeCard(color, value) {
-        const cardIndex = this.cards.findIndex(card => card.color === color && card.value === value);
+        const cardIndex = this.cards.findIndex(card => card.value === value && (card.value.includes('WILD') || card.color === color));
         this.cards.splice(cardIndex, 1);
     }
 }
@@ -86,9 +98,67 @@ class Game {
             });
         }
 
+        // get first card for discard pile
+        this.discardedCardDeck.push(this.gameDeck.getRandomFirstCard());
+
         // assign random player to begin game
         this.currentPlayer = this.players[Math.floor(Math.random() * this.players.length)].name;
         this.status = "STARTED";
+    }
+
+    setNextPlayer() {
+        const currentPlayerName = this.currentPlayer;
+        const currentPlayerIndex = this.players.findIndex(player => player.name === currentPlayerName);
+        let nextPlayerIndex = 0;
+        if(this.direction === 'CLOCKWISE') {
+            nextPlayerIndex = currentPlayerIndex + 1;
+            if (nextPlayerIndex === this.players.length) {
+                nextPlayerIndex = 0;
+            }
+        } else {
+            nextPlayerIndex = currentPlayerIndex - 1;
+            if (nextPlayerIndex === -1) {
+                nextPlayerIndex = this.players.length - 1;
+            }
+        }
+        this.currentPlayer = this.players[nextPlayerIndex].name;
+    }
+
+    pickCard(playerName) {
+        const player = this.players.find(player => player.name === playerName);
+        const card = this.gameDeck.pickCard();
+        player.addCard(card);
+    }
+
+    playCard(playerName, color, value) {
+        if (this.currentPlayer !== playerName) {
+            return 'NOT_PLAYERS_TURN';
+        }
+        if(!canPlayCard(this.discardedCardDeck[this.discardedCardDeck.length -1], new Card(color, value))) {
+            return 'CANNOT_PLAY_CARD';
+        }
+
+        // take card away from player
+        const player = this.players.find(player => player.name === playerName);
+        player.removeCard(color, value);
+
+        // add card to discard pile top
+        this.discardedCardDeck.push(new Card(color, value));
+
+        // take action based on card value
+        if (value === 'DRAW_2') {
+            this.setNextPlayer();
+            this.pickCard(this.currentPlayer);
+            this.pickCard(this.currentPlayer);
+        } else if (value === 'SKIP') {
+            this.setNextPlayer();
+        } else if (value === 'REVERSE') {
+            this.direction = this.direction === 'CLOCKWISE' ? 'ANTI_CLOCKWISE' : 'CLOCKWISE';
+        }
+
+        // Set next player to play
+        this.setNextPlayer();
+        return 'SUCCESS';
     }
 }
 

@@ -24,7 +24,6 @@ export default function GamePlay() {
     }
 
     const gameStatus = game.game.status;
-    console.log(gameStatus);
     if (errorMessage.length === 0) {
         return (
             <div>
@@ -38,9 +37,11 @@ export default function GamePlay() {
                     Number of Players: {game.game.players.length}
                 </div>
                 {gameStatus === 'NOT_STARTED' && <div>
-                    <button onClick={() => {
+                    { game.game.players.length >= 2 && <button  onClick={() => {
                         fetch(`/api/start?name=${game.name}&gameID=${game.gameID}`, {method: 'GET'});
-                    }}>Start Game</button>
+                    }}>Start Game</button>}
+                {game.game.players.length < 2 && <div>Waiting for more players to join</div>
+                }
                 </div>}
                 {gameStatus === 'STARTED' && <GameInProgress />}
                 {/*Game completed*/}
