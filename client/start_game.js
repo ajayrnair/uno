@@ -18,7 +18,7 @@ export default function StartGame() {
 
   if (!isGameInitialized) {
     return (
-      <div>
+      <div style={{display:'flex',flexDirection: 'column', alignItems: 'center'}}>
         <input type='text' placeholder='Player Name' onChange={event => setName(event.target.value || '')}/>
         <br/>
         <br/>

@@ -170,9 +170,11 @@ export default function Layout({children}) {
 
         button {
           background-color: #ebcc5e;
-          font-size: 12px;
+          font-size: 16px;
           color: #0c2a3c;
           border-radius: 5px;
+          padding: 5px;
+          border: 0;
         }
 
         * {
@@ -191,6 +193,12 @@ export default function Layout({children}) {
         .status-info {
           align-self: center;
           padding-left: 10px;
+        }
+
+        input[type='text'] {
+          border-radius: 7px;
+          font-size: 16px;
+          padding: 5px;
         }
 
         main {
