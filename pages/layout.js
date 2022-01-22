@@ -167,6 +167,11 @@ export default function Layout({children}) {
           cursor: pointer;
         }
 
+        button[disabled] {
+          background-color: #C0C0C0;
+          cursor: not-allowed;
+        }
+
         * {
           box-sizing: border-box;
         }
