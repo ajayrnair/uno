@@ -1,4 +1,4 @@
-
+import Image from 'next/image'
 import { useSelector, useDispatch } from 'react-redux'
 import fetch from 'node-fetch';
 import canPlayCard from './canPlayCard';
@@ -20,13 +20,44 @@ function getColor(color) {
     return 'black';
 }
 
+function getDisplayValue(value) {
+    if(value==='DRAW_2') {
+        return '2+';
+    }
+    if(value==='WILD') {
+        return 'W';
+    }
+    if(value==='WILD_DRAW4') {
+        return '4+';
+    }
+    if(value==='SKIP') {
+        return <Image
+            src="/images/skip.png" // Route of the image file
+            height={20} // Desired size with correct aspect ratio
+            width={20} // Desired size with correct aspect ratio
+            alt="skip"
+        />;
+    }
+    if(value==='REVERSE') {
+        return <Image
+            src="/images/reverse.png" // Route of the image file
+            height={20} // Desired size with correct aspect ratio
+            width={20} // Desired size with correct aspect ratio
+            alt="reverse"
+        />;
+    }
+    return value;
+
+
+}
+
 export default function GameInProgress() {
     const game = useSelector( state => state.game);
     const dispatch = useDispatch();
     const playerName  = game.name;
     const player = game.game.players.find(player => player.name === playerName);
     const playerCards = player.cards;
-    const otherPlayers = game.game.players.filter(player => player.name !== playerName).map(player => {
+    const otherPlayers = game.game.players.map(player => {
         return {
             name: player.name,
             numberOfCards: player.cards.length
@@ -38,7 +69,9 @@ export default function GameInProgress() {
     const currentPlayer = game.game.currentPlayer;
     const isTurn = playerName === currentPlayer
     return <div className='gameArea'>
-        <div className = 'otherPlayers' style={{display: 'flex', justifyContent: 'space-around'}}>
+        {game.game.direction === 'CLOCKWISE' && <div style={{textAlign: 'center', fontSize: 24, marginBottom: 8}}>&#8594;  &#8594;  &#8594;</div>}
+        {game.game.direction !== 'CLOCKWISE' && <div style={{textAlign: 'center', fontSize: 24, marginBottom: 8}}>&#x2190;  &#x2190;  &#x2190;</div>}
+        <div className = 'otherPlayers' style={{display: 'flex', justifyContent: 'space-around', flexWrap:'wrap'}}>
             {otherPlayers.map(player => {
                 return (
                     <div className={`game-player${currentPlayer === player.name ? ' current-player' : ''}`} key={player.name} >
@@ -54,19 +87,20 @@ export default function GameInProgress() {
                 );
             })}
         </div>
-        <div className='discardCardArea' style={{marginTop:'20px'}}>
+
+        <div className='discardCardArea' style={{marginTop:'48px', display: 'flex', justifyContent:'center'}}>
             <div>
-                <div className='card' style={{color: getColor(topCard.color)}}>
-                    {topCard.value}
+                <div className='card' style={{backgroundColor: getColor(topCard.color), textAlign:'center'}}>
+                    {getDisplayValue(topCard.value)}
                 </div>
-                <div style={{color: 'pink', fontSize: '20px'}}>{game.game.direction==='CLOCKWISE' ? '⟳' : '↺'}</div>
             </div>
         </div>
-        <div className = 'cards' style={{marginTop:'20px'}}>
-               {playerCards.map(card => {
+
+        <div className = 'cards' style={{display: 'flex', justifyContent: 'space-around', flexWrap:'wrap', marginTop: 48}}>
+               {playerCards.map((card, index) => {
                    const canPlay = canPlayCard(topCard, card);
                    return (
-                        <div className='card' style={{color: getColor(card.color), cursor: canPlay ? 'pointer': ''}} onClick={() => {
+                        <div className='card' style={{textAlign:'center', backgroundColor: getColor(card.color), cursor: canPlay ? 'pointer': ''}} key={index}  onClick={() => {
                             if (!isTurn) {
                                 alert('Not your turn');
                             }
@@ -81,7 +115,7 @@ export default function GameInProgress() {
                                 alert('Cannot play this card on top of current card');
                             }
                         }}>
-                            {card.value}
+                            {getDisplayValue(card.value)}
                         </div>
                    );
                })}

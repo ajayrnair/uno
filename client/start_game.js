@@ -19,7 +19,7 @@ export default function StartGame() {
   if (!isGameInitialized) {
     return (
       <div style={{display:'flex',flexDirection: 'column', alignItems: 'center'}}>
-        <input type='text' placeholder='Player Name' onChange={event => setName(event.target.value || '')}/>
+        <input type='text' placeholder='Player Name' onChange={event => setName(event.target.value || '')} maxLength={6}/>
         <br/>
         <br/>
         <input type='text' placeholder="Game ID" onChange={event => setGameID(event.target.value || '')}/>

@@ -216,17 +216,25 @@ export default function Layout({children}) {
         }
 
         .game-player {
-          margin: 0 12px;
-          font-size: 16px;
+          margin: 0 8px;
+          font-size: 12px;
           display: flex;
           flex-direction: column;
           border: 2px #aeaeae dotted;
           border-radius: 10px;
-          padding: 8px;
+          padding: 4px;
         }
 
         .game-player.current-player {
           border: 2px #EFD469 dotted;
+        }
+
+        .card {
+          color: white;
+          border: 1px solid white;
+          width: 50px;
+          padding: 10px;
+          border-radius: 6px;
         }
       }
 
