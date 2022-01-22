@@ -4,29 +4,36 @@ import { useSelector, useDispatch } from 'react-redux'
 import { updateGame } from './gameSlice'
 import GamePlay from './game';
 
+let buttonLabel = 'Create Game';
+
+setTimeout(() => {
+  var queryDict = {};
+  window.location.search.substr(1).split("&").forEach(function(item) {queryDict[item.split("=")[0]] = item.split("=")[1]});
+  if (queryDict.gameID != null) {
+    document.getElementById('create_button').innerHTML = 'Join Game';
+  }
+},1000);
+
 export default function StartGame() {
   const dispatch = useDispatch();
   const game = useSelector( state => state.game);
   const isGameInitialized = game != null && game.name != null;
 
   let [name, setName] = useState('');
-  const [gameID, setGameID] = useState('');
   const [errorMessage, setErrorMessage] = useState(null);
   const isErrorState = name.trim() === '';
-  const buttonLabel = gameID.trim() === '' ? 'Start Game' : 'Join Game';
 
   if (!isGameInitialized) {
     return (
       <div style={{display:'flex',flexDirection: 'column', alignItems: 'center'}}>
         <input type='text' placeholder='Player Name' onChange={event => setName(event.target.value || '')} maxLength={6}/>
         <br/>
-        <br/>
-        <input type='text' placeholder="Game ID" onChange={event => setGameID(event.target.value || '')}/>
-        <br/>
-        <br/>
-        <button disabled={isErrorState} onClick={async () => {
+        <button id='create_button' disabled={isErrorState} onClick={async () => {
           name=name.trim();
-          const response = await fetch(`/api/join?name=${name}&gameID=${gameID}`, {method: 'GET'});
+          var queryDict = {};
+          window.location.search.substr(1).split("&").forEach(function(item) {queryDict[item.split("=")[0]] = item.split("=")[1]});
+          const gameSessionID = queryDict.gameID == null ? Math.random().toString(36).slice(3) : queryDict.gameID;
+          const response = await fetch(`/api/join?name=${name}&gameID=${gameSessionID}`, {method: 'GET'});
           const gameData = await response.json();
           if(gameData.status === 'INVALID_GAME_STATUS') {
             setErrorMessage('This game has already started or ended');

@@ -66,6 +66,7 @@ function getPlayer(name) {
         name,
         cards: [],
         allowedToSkip: false,
+        isAdmin: false,
     }
 }
 
@@ -101,7 +102,11 @@ function addPlayerToGame(game, playerName) {
       if (game.players.some(({name}) => name === playerName)) {
           return "PLAYER_NAME_USED";
       }
-      game.players.push(getPlayer(playerName));
+      const player = getPlayer(playerName);
+      if(game.players.length === 0) { // first player is the admin
+        player.isAdmin = true;
+      }
+      game.players.push(player);
       return "SUCCESS";
 }
 

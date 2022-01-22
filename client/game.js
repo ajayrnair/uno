@@ -10,6 +10,8 @@ export default function GamePlay() {
     const game = useSelector( state => state.game);
     const dispatch = useDispatch();
     const [errorMessage, setErrorMessage] = useState('');
+    const adminPlayer = game.game.players.find(player => player.isAdmin === true);
+    const isPlayerAdmin = adminPlayer !=null && adminPlayer.name === game.name;
 
     if (intervalID == null) {
         intervalID = window.setInterval(async () => {
@@ -31,7 +33,17 @@ export default function GamePlay() {
                     {gameStatus === 'NOT_STARTED' && <div style={{textAlign: 'center'}}>
                         <div>
                             <div className='start-area-game-id'>
-                                Game ID: <span>{game.gameID} &#128203;</span>
+                                <div style={{fontSize: 16, marginBottom: 12}}>Copy the link below and share with your friends to play together</div>
+                                <input id='copy_url' value={`https://nairuno.vercel.app/?gameID=${game.gameID}`} disabled/> <button style={{fontSize: 12}} onClick={() => {
+                                    var copyText = document.getElementById("copy_url");
+
+                                    /* Select the text field */
+                                    copyText.select();
+                                    copyText.setSelectionRange(0, 99999); /* For mobile devices */
+
+                                     /* Copy the text inside the text field */
+                                    navigator.clipboard.writeText(copyText.value);
+                                }}>Copy</button>
                             </div>
                             <div className='players' style={{marginTop: 50, marginBottom: 50, display: 'flex', flexDirection: 'column',}}>
                                 {game.game.players.map(player => {
@@ -41,7 +53,7 @@ export default function GamePlay() {
                                     </div>);
                                 })}
                             </div>
-                            {game.game.players.length >= 2 &&
+                            {isPlayerAdmin && game.game.players.length >= 2 &&
                                 <div>
                                     <div>
                                         <button  onClick={() => {
