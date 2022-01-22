@@ -3,7 +3,6 @@ import {useState} from 'react';
 import { useSelector, useDispatch } from 'react-redux'
 import { updateGame } from './gameSlice'
 import GamePlay from './game';
-import Image from 'next/image'
 
 export default function StartGame() {
   const dispatch = useDispatch();

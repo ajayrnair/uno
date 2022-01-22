@@ -1,8 +1,4 @@
 import Head from 'next/head'
-import Image from 'next/image'
-import GameStatus from './status';
-import store from '../client/store'
-import { Provider } from 'react-redux'
 
 export default function Layout({children}) {
     return (<div className="container">
@@ -14,15 +10,6 @@ export default function Layout({children}) {
     <main>
         <h1 className="title">
         </h1>
-        <div className='game-status'>
-              <Image
-                  src="/images/Uno_Logo.png" // Route of the image file
-                  height={50} // Desired size with correct aspect ratio
-                  width={50} // Desired size with correct aspect ratio
-                  alt="Uno Logo"
-              />
-              <Provider store={store}><GameStatus/></Provider>
-          </div>
         {children}
     </main>
 

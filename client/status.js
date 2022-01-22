@@ -5,7 +5,7 @@ export default function GameStatus() {
     let status = '';
     const gameStatus = game != null ? game.game.status : null;
     if(gameStatus == null) {
-        status = "Invite friend and start a game!";
+        status = "Invite friends and start a game!";
     } else if (gameStatus === 'NOT_STARTED') {
         if(game != null && game.game.players != null && game.game.players.length >= 2) {
             status = 'Waiting for game to start';
