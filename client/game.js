@@ -67,7 +67,20 @@ export default function GamePlay() {
                     </div>}
 
                     {gameStatus === 'STARTED' && <GameInProgress />}
-                    {gameStatus === 'COMPLETED' && <div>{game.game.winner} won the game!</div>}
+                    {gameStatus === 'COMPLETED' && <div>
+                        <div>
+                        {game.game.winner} won the game!
+                        </div>
+                        <div style={{marginTop: '20px', textAlign: 'center'}}>
+                            <button onClick={async ()=> {
+                                const response = await fetch(`/api/restart?name=${game.name}&gameID=${game.gameID}`, {method: 'GET'});
+                                const gameData = await response.json();
+                                if (gameData.status === 'GAME_NOT_COMPLETED') {
+                                    setErrorMessage('Only completed games can be played again.');
+                                }
+                            }}>Play again</button>
+                        </div>
+                    </div>}
                 </div>
             </div>
         );

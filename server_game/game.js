@@ -110,7 +110,19 @@ function addPlayerToGame(game, playerName) {
       return "SUCCESS";
 }
 
-function startGame(game) {
+function startGame(game, restartGame=false) {
+
+    if (restartGame === true) {
+        const players = game.players.map(player => getPlayer(player.name));
+        players[0].isAdmin = true;
+
+        game = createGame(game.gameID);
+        game.players = players;
+
+        game.discardedCardDeck = [];
+    }
+
+
     // deal cards
     for (let i=0; i<7; i++) {
         game.players.forEach(player => {
@@ -124,6 +136,7 @@ function startGame(game) {
     // assign random player to begin game
     game.currentPlayer = game.players[Math.floor(Math.random() * game.players.length)].name;
     game.status = "STARTED";
+    return game;
 }
 
 function setNextPlayer(game) {
