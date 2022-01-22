@@ -1,5 +1,6 @@
 import Head from 'next/head'
 import Image from 'next/image'
+import GameStatus from './status';
 
 export default function Layout({children}) {
     return (<div className="container">
@@ -10,13 +11,16 @@ export default function Layout({children}) {
 
     <main>
         <h1 className="title">
-            <Image
-                src="/images/Uno_Logo.png" // Route of the image file
-                height={144} // Desired size with correct aspect ratio
-                width={144} // Desired size with correct aspect ratio
-                alt="Uno Logo"
-            />
         </h1>
+        <div className='game-status'>
+              <Image
+                  src="/images/Uno_Logo.png" // Route of the image file
+                  height={50} // Desired size with correct aspect ratio
+                  width={50} // Desired size with correct aspect ratio
+                  alt="Uno Logo"
+              />
+              <GameStatus/>
+          </div>
         {children}
     </main>
 
@@ -35,18 +39,9 @@ export default function Layout({children}) {
           align-items: center;
         }
 
-        main {
-          padding: 5rem 0;
-          flex: 1;
-          display: flex;
-          flex-direction: column;
-          justify-content: center;
-          align-items: center;
-        }
-
         footer {
           width: 100%;
-          height: 100px;
+          height: 50px;
           border-top: 1px solid #eaeaea;
           display: flex;
           justify-content: center;
@@ -110,7 +105,7 @@ export default function Layout({children}) {
           justify-content: center;
           flex-wrap: wrap;
 
-          max-width: 800px;
+          width: 100%;
           margin-top: 3rem;
         }
 
@@ -168,10 +163,39 @@ export default function Layout({children}) {
           font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto,
             Oxygen, Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue,
             sans-serif;
+          font-size: 16px;
+          background-color: #0c2a3c;
+          color: white;
+        }
+
+        button {
+          background-color: #ebcc5e;
+          font-size: 12px;
+          color: #0c2a3c;
+          border-radius: 5px;
         }
 
         * {
           box-sizing: border-box;
+        }
+
+        .game-status {
+          position: absolute;
+          width: 100%;
+          top: 5px;
+          left: 0;
+          display: flex;
+          justify-content: center;
+        }
+
+        .status-info {
+          align-self: center;
+          padding-left: 10px;
+        }
+
+        main {
+          flex: 1;
+          margin-top: 100px;
         }
       `}</style>
       </div>);

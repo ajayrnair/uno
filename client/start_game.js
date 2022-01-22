@@ -3,6 +3,7 @@ import {useState} from 'react';
 import { useSelector, useDispatch } from 'react-redux'
 import { updateGame } from './gameSlice'
 import GamePlay from './game';
+import Image from 'next/image'
 
 export default function StartGame() {
   const dispatch = useDispatch();
@@ -29,9 +30,9 @@ export default function StartGame() {
           const response = await fetch(`/api/join?name=${name}&gameID=${gameID}`, {method: 'GET'});
           const gameData = await response.json();
           if(gameData.status === 'INVALID_GAME_STATUS') {
-            setErrorMessage('You cannot join this game because it has already started or has completed.');
+            setErrorMessage('Game has started or ended');
           } else if(gameData.status === 'PLAYER_NAME_USED')  {
-            setErrorMessage('Someone else has used that name in this game.');
+            setErrorMessage('Use a different name.');
           } else {
             dispatch(updateGame(gameData));
           }
