@@ -38,12 +38,18 @@ export default function GameInProgress() {
     const currentPlayer = game.game.currentPlayer;
     const isTurn = playerName === currentPlayer
     return <div className='gameArea'>
-        <div className = 'otherPlayers' style={{marginTop:'20px'}}>
+        <div className = 'otherPlayers' style={{display: 'flex', justifyContent: 'space-around'}}>
             {otherPlayers.map(player => {
                 return (
-                    <div className={'player'+ player.name === currentPlayer ? ', currentPlayer' : ''}>
-                        <div className='playerName'>Name: {player.name}</div>
-                        <div className='playerCards'>Cards: {player.numberOfCards}</div>
+                    <div className={`game-player${currentPlayer === player.name ? ' current-player' : ''}`} key={player.name} >
+                        <div style={{display: 'flex', marginBottom: 12}} key={player.name}>
+                            <div>&#128100;</div>
+                            <div style={{marginLeft: 8, display: 'flex', alignItems: 'center'}}>{player.name}</div>
+                        </div>
+                        <div style={{display: 'flex', justifyContent: 'center'}}>
+                            <div>&#127183;</div>
+                            <div style={{marginLeft: 4, display: 'flex', alignItems: 'center'}}>{player.numberOfCards}</div>
+                        </div>
                     </div>
                 );
             })}

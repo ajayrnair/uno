@@ -27,24 +27,36 @@ export default function GamePlay() {
     if (errorMessage.length === 0) {
         return (
             <div>
-                <div>
-                    Name: {game.name}
+                <div className='start-area'>
+                    {gameStatus === 'NOT_STARTED' && <div style={{textAlign: 'center'}}>
+                        <div>
+                            <div className='start-area-game-id'>
+                                Game ID: <span>{game.gameID} &#128203;</span>
+                            </div>
+                            <div className='players' style={{marginTop: 50, marginBottom: 50, display: 'flex', flexDirection: 'column',}}>
+                                {game.game.players.map(player => {
+                                    return (<div style={{display: 'flex', marginBottom: 16}} key={player.name}>
+                                        <div>&#128100;</div>
+                                        <div style={{marginLeft: 12}}>{player.name}</div>
+                                    </div>);
+                                })}
+                            </div>
+                            {game.game.players.length >= 2 &&
+                                <div>
+                                    <div>
+                                        <button  onClick={() => {
+                                            fetch(`/api/start?name=${game.name}&gameID=${game.gameID}`, {method: 'GET'});
+                                        }}>Start Game</button>
+                                    </div>
+                                    <div className='info-message' style={{marginTop: 8}}>Start after everyone joins</div>
+                                </div>
+                            }
+                        </div>
+                    </div>}
+
+                    {gameStatus === 'STARTED' && <GameInProgress />}
+                    {gameStatus === 'COMPLETED' && <div>{game.game.winner} won the game!</div>}
                 </div>
-                <div>
-                    Game ID: {game.gameID}
-                </div>
-                <div>
-                    Number of Players: {game.game.players.length}
-                </div>
-                {gameStatus === 'NOT_STARTED' && <div>
-                    { game.game.players.length >= 2 && <button  onClick={() => {
-                        fetch(`/api/start?name=${game.name}&gameID=${game.gameID}`, {method: 'GET'});
-                    }}>Start Game</button>}
-                {game.game.players.length < 2 && <div>Waiting for more players to join</div>
-                }
-                </div>}
-                {gameStatus === 'STARTED' && <GameInProgress />}
-                {gameStatus === 'COMPLETED' && <div>{game.game.winner} won the game!</div>}
             </div>
         );
     } else {

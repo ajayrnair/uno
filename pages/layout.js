@@ -163,7 +163,7 @@ export default function Layout({children}) {
           font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto,
             Oxygen, Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue,
             sans-serif;
-          font-size: 16px;
+          font-size: 20px;
           background-color: #0c2a3c;
           color: white;
         }
@@ -197,7 +197,7 @@ export default function Layout({children}) {
 
         input[type='text'] {
           border-radius: 7px;
-          font-size: 16px;
+          font-size: 20px;
           padding: 5px;
         }
 
@@ -205,6 +205,31 @@ export default function Layout({children}) {
           flex: 1;
           margin-top: 100px;
         }
+
+        .error-message {
+          color: #C02F1D;
+        }
+
+        .info-message {
+          color: #ebcc5e;
+          font-size: 16px;
+        }
+
+        .game-player {
+          margin: 0 12px;
+          font-size: 16px;
+          display: flex;
+          flex-direction: column;
+          border: 2px #aeaeae dotted;
+          border-radius: 10px;
+          padding: 8px;
+        }
+
+        .game-player.current-player {
+          border: 2px #EFD469 dotted;
+        }
+      }
+
       `}</style>
       </div>);
 }

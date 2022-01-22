@@ -30,14 +30,14 @@ export default function StartGame() {
           const response = await fetch(`/api/join?name=${name}&gameID=${gameID}`, {method: 'GET'});
           const gameData = await response.json();
           if(gameData.status === 'INVALID_GAME_STATUS') {
-            setErrorMessage('Game has started or ended');
+            setErrorMessage('This game has already started or ended');
           } else if(gameData.status === 'PLAYER_NAME_USED')  {
-            setErrorMessage('Use a different name.');
+            setErrorMessage('This name is already used.');
           } else {
             dispatch(updateGame(gameData));
           }
         }}>{buttonLabel}</button>
-        <div style={{color:'red'}}>{errorMessage}</div>
+        <div className='error-message' style={{marginTop: 10}}>{errorMessage}</div>
       </div>
     );
   } else {
