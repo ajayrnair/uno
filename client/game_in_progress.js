@@ -96,7 +96,38 @@ export default function GameInProgress() {
             </div>
         </div>
 
-        <div className = 'cards' style={{display: 'flex', justifyContent: 'space-around', flexWrap:'wrap', marginTop: 48}}>
+        {isNewColorRequired && <div style={{margin: '32px 0 12px 0', display:'flex', justifyContent: 'space-around', border: '1px solid #aeaeae', borderRadius: '10px', backgroundColor: '#3C6478', padding: '10px'}}>
+                <div>
+                    <button style={{color: 'white', backgroundColor:`${getColor('red')}`}} disabled={!isNewColorRequired} onClick={() => {
+                        fetch(`/api/play?name=${playerName}&gameID=${game.gameID}&color=red&value=${wildTypeDraw4 === true ? 'WILD_DRAW4' : 'WILD'}`, {method: 'GET'});
+                        setWildTypeDraw4(null);
+                        setIsNewColorRequired(false);
+                    }}>Red</button>
+                </div>
+                <div>
+                    <button  style={{color: 'white',backgroundColor:`${getColor('green')}`}} disabled={!isNewColorRequired} onClick={() => {
+                        fetch(`/api/play?name=${playerName}&gameID=${game.gameID}&color=green&value=${wildTypeDraw4 === true ? 'WILD_DRAW4' : 'WILD'}`, {method: 'GET'});
+                        setWildTypeDraw4(null);
+                        setIsNewColorRequired(false);
+                    }}>Green</button>
+                </div>
+                <div>
+                    <button style={{color: 'white',backgroundColor:`${getColor('yellow')}`}} disabled={!isNewColorRequired} onClick={() => {
+                        fetch(`/api/play?name=${playerName}&gameID=${game.gameID}&color=yellow&value=${wildTypeDraw4 === true ? 'WILD_DRAW4' : 'WILD'}`, {method: 'GET'});
+                        setWildTypeDraw4(null);
+                        setIsNewColorRequired(false);
+                    }}>Yellow</button>
+                </div>
+                <div>
+                    <button disabled={!isNewColorRequired} style={{color: 'white', backgroundColor:`${getColor('blue')}`}} onClick={() => {
+                        fetch(`/api/play?name=${playerName}&gameID=${game.gameID}&color=blue&value=${wildTypeDraw4 === true ? 'WILD_DRAW4' : 'WILD'}`, {method: 'GET'});
+                        setWildTypeDraw4(null);
+                        setIsNewColorRequired(false);
+                    }}>Blue</button>
+                </div>
+             </div>}
+
+        <div className = 'cards' style={{display: 'flex', justifyContent: 'center', flexWrap:'wrap', marginTop: 48}}>
                {playerCards.map((card, index) => {
                    const canPlay = canPlayCard(topCard, card);
                    return (
@@ -120,45 +151,17 @@ export default function GameInProgress() {
                    );
                })}
         </div>
-        <div className = 'actionArea' style={{marginTop:'20px'}}>
-              {player.allowedToSkip !== true && <div>
+        <div className = 'actionArea' style={{marginTop:'20px', display: 'flex', justifyContent:'center', marginTop: '48px', flexDirection: 'column'}}>
+              {player.allowedToSkip !== true && <div style={{display:'flex', justifyContent:'center'}}>
                 <button disabled={!isTurn} onClick={() => {
                     fetch(`/api/pick?name=${playerName}&gameID=${game.gameID}`, {method: 'GET'});
                 }}>Pick A Card</button>
              </div>}
-             {player.allowedToSkip == true && <div>
+             {player.allowedToSkip == true && <div style={{display:'flex', justifyContent:'center'}}>
                 <button disabled={!isTurn} onClick={() => {
                     fetch(`/api/skip?name=${playerName}&gameID=${game.gameID}`, {method: 'GET'});
                 }}>Skip turn</button>
              </div>}
-             <div>
-                <button disabled={!isNewColorRequired} onClick={() => {
-                    fetch(`/api/play?name=${playerName}&gameID=${game.gameID}&color=red&value=${wildTypeDraw4 === true ? 'WILD_DRAW4' : 'WILD'}`, {method: 'GET'});
-                    setWildTypeDraw4(null);
-                    setIsNewColorRequired(false);
-                }}>Red</button>
-             </div>
-             <div>
-                <button disabled={!isNewColorRequired} onClick={() => {
-                    fetch(`/api/play?name=${playerName}&gameID=${game.gameID}&color=green&value=${wildTypeDraw4 === true ? 'WILD_DRAW4' : 'WILD'}`, {method: 'GET'});
-                    setWildTypeDraw4(null);
-                    setIsNewColorRequired(false);
-                }}>Green</button>
-             </div>
-             <div>
-                <button disabled={!isNewColorRequired} onClick={() => {
-                    fetch(`/api/play?name=${playerName}&gameID=${game.gameID}&color=yellow&value=${wildTypeDraw4 === true ? 'WILD_DRAW4' : 'WILD'}`, {method: 'GET'});
-                    setWildTypeDraw4(null);
-                    setIsNewColorRequired(false);
-                }}>Yellow</button>
-             </div>
-             <div>
-                <button disabled={!isNewColorRequired} onClick={() => {
-                    fetch(`/api/play?name=${playerName}&gameID=${game.gameID}&color=blue&value=${wildTypeDraw4 === true ? 'WILD_DRAW4' : 'WILD'}`, {method: 'GET'});
-                    setWildTypeDraw4(null);
-                    setIsNewColorRequired(false);
-                }}>Blue</button>
-             </div>
         </div>
     </div>;
 

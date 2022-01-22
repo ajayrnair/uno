@@ -173,8 +173,9 @@ export default function Layout({children}) {
           font-size: 16px;
           color: #0c2a3c;
           border-radius: 5px;
-          padding: 5px;
+          padding: 8px;
           border: 0;
+          cursor: pointer;
         }
 
         * {
