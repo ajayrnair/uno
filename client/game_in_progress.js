@@ -6,18 +6,18 @@ import {useState} from 'react';
 
 function getColor(color) {
     if (color==='red') {
-        return '#872a23';
+        return '#AD2A1A';
     }
     if (color==='green') {
-        return '#3d8033';
+        return '#AD2A';
     }
     if (color==='yellow') {
-        return '#c7a022';
+        return '#EBC944';
     }
     if (color==='blue') {
-        return '#1f41bf';
+        return '#1f75fe';
     }
-    return 'black';
+    return '#1f1f1f';
 }
 
 function getDisplayValue(value) {
