@@ -6,16 +6,16 @@ import {useState} from 'react';
 
 function getColor(color) {
     if (color==='red') {
-        return '#AD2A1A';
+        return '#D72600';
     }
     if (color==='green') {
-        return '#AD2A';
+        return '#379711';
     }
     if (color==='yellow') {
-        return '#EBC944';
+        return '#ECD407';
     }
     if (color==='blue') {
-        return '#1f75fe';
+        return '#0956BF';
     }
     return '#1f1f1f';
 }
