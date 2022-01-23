@@ -174,7 +174,7 @@ export default function GameInProgress() {
                     fetch(`/api/skip?name=${playerName}&gameID=${game.gameID}`, {method: 'GET'});
                 }}>Skip turn</button>
              </div>}
-             {playerCards.length <= 2 && player.unoStatus !== 'UNO_CALLED' &&
+             {(playerCards.length < 2 && player.unoStatus !== 'UNO_CALLED') || (playerCards.length === 2 && isTurn) &&
                 <div style={{display:'flex', justifyContent:'center', marginTop: '10px'}}>
                     <button onClick={() => {
                         fetch(`/api/calluno?name=${playerName}&gameID=${game.gameID}`, {method: 'GET'});
