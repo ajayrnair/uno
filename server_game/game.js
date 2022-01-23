@@ -177,6 +177,22 @@ function callUNO(game, playerName) {
     return 'SUCCESS';
 }
 
+function catchUNO(game, playerNameToCatch) {
+    const player = game.players.find(player => player.name === playerNameToCatch);
+    if(player.cards.length >= 2) {
+        return 'TOO_MANY_CARDS';
+    } else if (player.unoStatus === 'UNO_CALLED') {
+        return 'PLAYER_CALLED_UNO';
+    } else if (player.unoStatus === 'PENALIZED') {
+        return 'PLAYER_ALREADY_PENALIZED';
+    }
+    playPickCard(game, player.name, true);
+    playPickCard(game, player.name, true);
+    playPickCard(game, player.name, true);
+    playPickCard(game, player.name, true);
+    player.unoStatus = 'PENALIZED';
+}
+
 function playCard(game, playerName, color, value) {
     if (game.currentPlayer !== playerName) {
         return 'NOT_PLAYERS_TURN';
@@ -232,5 +248,6 @@ export default {
     setNextPlayer,
     playPickCard,
     playCard,
-    callUNO
+    callUNO,
+    catchUNO
 }
