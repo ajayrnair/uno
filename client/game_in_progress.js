@@ -60,7 +60,8 @@ export default function GameInProgress() {
     const otherPlayers = game.game.players.map(player => {
         return {
             name: player.name,
-            numberOfCards: player.cards.length
+            numberOfCards: player.cards.length,
+            unoStatus: player.unoStatus
         };
     });
     const [isNewColorRequired, setIsNewColorRequired] = useState(false);
@@ -73,16 +74,27 @@ export default function GameInProgress() {
         {game.game.direction !== 'CLOCKWISE' && <div style={{textAlign: 'center', fontSize: 24, marginBottom: 8}}>&#x2190;  &#x2190;  &#x2190;</div>}
         <div className = 'otherPlayers' style={{display: 'flex', justifyContent: 'space-around', flexWrap:'wrap'}}>
             {otherPlayers.map(player => {
+                const thisPlayer = game.game.players.find(player => player.name === playerName);
                 return (
-                    <div className={`game-player${currentPlayer === player.name ? ' current-player' : ''}`} key={player.name} >
-                        <div style={{display: 'flex', marginBottom: 12}} key={player.name}>
-                            <div>&#128100;</div>
-                            <div style={{marginLeft: 8, display: 'flex', alignItems: 'center'}}>{player.name}</div>
+                    <div>
+                        <div className={`game-player${currentPlayer === player.name ? ' current-player' : ''}`} key={player.name} >
+                            <div style={{display: 'flex', marginBottom: 12}} key={player.name}>
+                                <div>&#128100;</div>
+                                <div style={{marginLeft: 8, display: 'flex', alignItems: 'center'}}>{player.name}</div>
+                            </div>
+                            <div style={{display: 'flex', justifyContent: 'center'}}>
+                                <div>&#127183;</div>
+                                <div style={{marginLeft: 4, display: 'flex', alignItems: 'center'}}>{player.numberOfCards}</div>
+                            </div>
                         </div>
-                        <div style={{display: 'flex', justifyContent: 'center'}}>
-                            <div>&#127183;</div>
-                            <div style={{marginLeft: 4, display: 'flex', alignItems: 'center'}}>{player.numberOfCards}</div>
-                        </div>
+                        {player.name !== thisPlayer.name && currentPlayer != player.name && player.numberOfCards < 2 && player.unoStatus !== 'UNO_CALLED' && player.unoStatus !== 'PENALIZED' && <div style={{fontSize: '12px', textAlign: 'center', marginTop: '10px', cursor: 'pointer', color: '#C02F1D'}}>
+                            <a onClick={() => {
+
+                            }}>&#128110; Catch UNO</a>
+                        </div>}
+                        {player.name !== thisPlayer.name && player.numberOfCards < 2 && player.unoStatus === 'UNO_CALLED' && <div style={{fontSize: '12px', textAlign: 'center', marginTop: '10px', cursor: 'pointer', color: '#C02F1D'}}>
+                        &#128526; Shouted UNO!
+                        </div>}
                     </div>
                 );
             })}
@@ -162,6 +174,13 @@ export default function GameInProgress() {
                     fetch(`/api/skip?name=${playerName}&gameID=${game.gameID}`, {method: 'GET'});
                 }}>Skip turn</button>
              </div>}
+             {playerCards.length <= 2 && player.unoStatus !== 'UNO_CALLED' &&
+                <div style={{display:'flex', justifyContent:'center', marginTop: '10px'}}>
+                    <button onClick={() => {
+                        fetch(`/api/calluno?name=${playerName}&gameID=${game.gameID}`, {method: 'GET'});
+                    }}>Shout UNO</button>
+                </div>
+             }
         </div>
     </div>;
 

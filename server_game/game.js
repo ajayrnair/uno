@@ -67,6 +67,7 @@ function getPlayer(name) {
         cards: [],
         allowedToSkip: false,
         isAdmin: false,
+        unoStatus: '', // UNO_CALLED, PENALIZED
     }
 }
 
@@ -167,6 +168,15 @@ function playPickCard(game, playerName, forcedToPick=false) {
     addCardToPlayer(player, card);
 }
 
+function callUNO(game, playerName) {
+    const player = game.players.find(player => player.name === playerName);
+    if(player.cards.length > 2) {
+        return 'TOO_MANY_CARDS';
+    }
+    player.unoStatus = 'UNO_CALLED';
+    return 'SUCCESS';
+}
+
 function playCard(game, playerName, color, value) {
     if (game.currentPlayer !== playerName) {
         return 'NOT_PLAYERS_TURN';
@@ -221,5 +231,6 @@ export default {
     startGame,
     setNextPlayer,
     playPickCard,
-    playCard
+    playCard,
+    callUNO
 }
