@@ -156,6 +156,13 @@ function setNextPlayer(game) {
         }
     }
     game.currentPlayer = game.players[nextPlayerIndex].name;
+
+    // Set UNO Status
+    game.players.forEach(player => {
+        if (player.name !== currentPlayerName && player.cards.length > 2 && player.unoStatus === 'UNO_CALLED') {
+            player.unoStatus = '';
+        }
+    });
 }
 
 function playPickCard(game, playerName, forcedToPick=false) {

@@ -92,8 +92,11 @@ export default function GameInProgress() {
                                 fetch(`/api/catchuno?name=${player.name}&gameID=${game.gameID}`, {method: 'GET'});
                             }}>&#128110; Catch UNO</a>
                         </div>}
-                        {player.name !== thisPlayer.name && player.numberOfCards < 2 && player.unoStatus === 'UNO_CALLED' && <div style={{fontSize: '12px', textAlign: 'center', marginTop: '10px', cursor: 'pointer', color: '#C02F1D'}}>
+                        {player.numberOfCards < 2 && player.unoStatus === 'UNO_CALLED' && <div style={{fontSize: '12px', textAlign: 'center', marginTop: '10px', cursor: 'pointer', color: '#C02F1D'}}>
                         &#128526; Shouted UNO!
+                        </div>}
+                        {player.unoStatus === 'PENALIZED' && <div style={{fontSize: '12px', textAlign: 'center', marginTop: '10px', cursor: 'pointer', color: '#C02F1D'}}>
+                        &#128546; UNO Penalty!
                         </div>}
                     </div>
                 );
@@ -174,11 +177,11 @@ export default function GameInProgress() {
                     fetch(`/api/skip?name=${playerName}&gameID=${game.gameID}`, {method: 'GET'});
                 }}>Skip turn</button>
              </div>}
-             {(playerCards.length < 2 && player.unoStatus !== 'UNO_CALLED') || (playerCards.length === 2 && isTurn) &&
+             {player.unoStatus !== 'UNO_CALLED' && ((playerCards.length < 2) || (playerCards.length === 2 && isTurn)) &&
                 <div style={{display:'flex', justifyContent:'center', marginTop: '10px'}}>
                     <button onClick={() => {
                         fetch(`/api/calluno?name=${playerName}&gameID=${game.gameID}`, {method: 'GET'});
-                    }}>Shout UNO</button>
+                    }}>Announce UNO!</button>
                 </div>
              }
         </div>
