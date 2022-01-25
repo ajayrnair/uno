@@ -24,7 +24,16 @@ export default {
         return await getGame(gameID, createNew);
     },
 
-    async saveGame(game) {
+    async saveGame(game, discardUnoSetting=false) {
+        if (!discardUnoSetting) {
+            // Set UNO Status
+            game.players.forEach(player => {
+                if (player.cards.length > 2 && player.unoStatus === 'UNO_CALLED') {
+                    console.log('player uno status reset');
+                    player.unoStatus = '';
+                }
+            });
+         }
         await memc.set(game.gameID, JSON.stringify(game));
     },
 

@@ -87,12 +87,12 @@ export default function GameInProgress() {
                                 <div style={{marginLeft: 4, display: 'flex', alignItems: 'center'}}>{player.numberOfCards}</div>
                             </div>
                         </div>
-                        {player.name !== thisPlayer.name && currentPlayer != player.name && player.numberOfCards < 2 && player.unoStatus !== 'UNO_CALLED' && player.unoStatus !== 'PENALIZED' && <div style={{fontSize: '12px', textAlign: 'center', marginTop: '10px', cursor: 'pointer', color: '#C02F1D'}}>
+                        {player.name !== thisPlayer.name && player.numberOfCards < 2 && player.unoStatus == '' && <div style={{fontSize: '12px', textAlign: 'center', marginTop: '10px', cursor: 'pointer', color: '#C02F1D'}}>
                             <a onClick={() => {
                                 fetch(`/api/catchuno?name=${player.name}&gameID=${game.gameID}`, {method: 'GET'});
                             }}>&#128110; Catch UNO</a>
                         </div>}
-                        {player.numberOfCards < 2 && player.unoStatus === 'UNO_CALLED' && <div style={{fontSize: '12px', textAlign: 'center', marginTop: '10px', cursor: 'pointer', color: '#C02F1D'}}>
+                        {player.unoStatus === 'UNO_CALLED' && <div style={{fontSize: '12px', textAlign: 'center', marginTop: '10px', cursor: 'pointer', color: '#C02F1D'}}>
                         &#128526; Shouted UNO!
                         </div>}
                         {player.unoStatus === 'PENALIZED' && <div style={{fontSize: '12px', textAlign: 'center', marginTop: '10px', cursor: 'pointer', color: '#C02F1D'}}>
@@ -181,7 +181,7 @@ export default function GameInProgress() {
                 <div style={{display:'flex', justifyContent:'center', marginTop: '10px'}}>
                     <button onClick={() => {
                         fetch(`/api/calluno?name=${playerName}&gameID=${game.gameID}`, {method: 'GET'});
-                    }}>Announce UNO!</button>
+                    }}>Shout UNO!</button>
                 </div>
              }
         </div>
